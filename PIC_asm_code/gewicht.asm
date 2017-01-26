@@ -4,14 +4,14 @@
 	include Gew_Mem.ASM
 
 	constant _AnzByte=D'20'		; Anzahl der Datenbytes in der Reisterkette
-	constant _ZTreibM=B'01000000'	; Startmuster für Zeilentreiber
+	constant _ZTreibM=B'01000000'	; Startmuster fÃ¼r Zeilentreiber
 	constant _Leer=0
 
 	org	0x0000		; Programmstartvektor
 
  	goto	Start
 
-	org	0x0020		; IRQ Vektor für Timer3
+	org	0x0020		; IRQ Vektor fÃ¼r Timer3
 
 IRQ	movpf	WREG,ISave	; WREG retten
 	movpf	BSR,ISave1	; Bank select laden
@@ -48,7 +48,7 @@ Start	bsf	CPUSTA,4	; alle IRQs abschalten
 	movlb	2		; Bank 2 aktivieren
 	movlw	0x0f
 	movfp	WREG,PR3H
-	movlw	0xa0		; Period-register für Timer 3 auf 0x1f40 setzen
+	movlw	0xa0		; Period-register fÃ¼r Timer 3 auf 0x1f40 setzen
 	movfp	WREG,PR3L	; entspricht 4.000 = 1ms bei 16 MHz
 	movlb	3
 	bcf	TCON2,3		; Timer 3 in Period Mode
@@ -62,7 +62,7 @@ Start	bsf	CPUSTA,4	; alle IRQs abschalten
 	movpf	WREG,RCSTA	; Receiver einstellen
 	movlw	D'25'
 	movpf	WREG,SPBRG	; 25 = 9600 Baud bei 16 MHz
-	clrf	PORTB		; PORTB löschen
+	clrf	PORTB		; PORTB lÃ¶schen
 	setf	DDRB		; PORTB = Input (6 Taster)
 
 	movlb	1
@@ -75,15 +75,15 @@ Start	bsf	CPUSTA,4	; alle IRQs abschalten
 
 	movlw	0x1a
 	movwf	FSR0
-Clear0	clrf	INDF0		; RAM löschen (0)
+Clear0	clrf	INDF0		; RAM lÃ¶schen (0)
 	movlr	1
-	clrf	INDF0		; RAM löschen (1)
+	clrf	INDF0		; RAM lÃ¶schen (1)
 	movlr	0
 	incfsz	FSR0
 	goto	Clear0
 
 	movlw	_ZTreibM
-	movwf	ZTreib		; Startmuster für Zeilentreiber
+	movwf	ZTreib		; Startmuster fÃ¼r Zeilentreiber
 	incf	RXS		; RXS auf 1
 
 	movlb	1
@@ -104,7 +104,7 @@ Main	movlb	0
 	goto	Main
 
 Main1	bcf	RCSTA,4
-	bsf	RCSTA,4		; OERR löschen
+	bsf	RCSTA,4		; OERR lÃ¶schen
 	movlw	1
 	movwf	RXS		; Empfangsstatus auf 1
 	clrf	RXFlag
@@ -123,17 +123,17 @@ SetAnz	movlw	SerData+D'28'		; Adresse Datenspeicher
 	movfp	Work2,FSR1		; Zeiger vorbereiten  *** 3 Digits setzen ***
 	movpf	INDF1,Char		; Daten kopieren
 	call	SetDig
-	incf	Work2			; nächstes Zeichen
+	incf	Work2			; nÃ¤chstes Zeichen
 	incf	Digit
 	movfp	Work2,FSR1		; Zeiger vorbereiten
 	movpf	INDF1,Char		; Daten kopieren
 	call	SetDig
-	incf	Work2			; nächstes Zeichen
+	incf	Work2			; nÃ¤chstes Zeichen
 	incf	Digit
 	movfp	Work2,FSR1		; Zeiger vorbereiten
 	movpf	INDF1,Char		; Daten kopieren
 	call	SetDig
-	incf	Work2			; nächstes Zeichen
+	incf	Work2			; nÃ¤chstes Zeichen
 
 	;btfsc	RXFlag,1		; Kurzer Datensatz ?
 	;goto	Peri2
@@ -152,11 +152,11 @@ SALoop	movlw	0
 
 	call	WrZeile			; Zeile beschreiben
 
-	clrf	RXFlag			; Empfangsflag löschen
+	clrf	RXFlag			; Empfangsflag lÃ¶schen
 
 	; Schalten der Lampen und der Hupe(n)
 Peri	movlb	1
-	clrf	Work2		; Zwischenspeicher löschen
+	clrf	Work2		; Zwischenspeicher lÃ¶schen
 	movlw	A'0'		; '0' = Inaktiv
 	cpfseq	SerData+D'31'	; 1. Lampe
 	bsf	Work2,0		; Wenn aktiv, Bit setzen
@@ -178,15 +178,15 @@ Peri	movlb	1
 	movfp	SerData+D'39',WREG	; Taster-Reset Byte
 	movwf	Work2
 	movlw	A'1'
-	cpfseq	Work2		; Reset für Taster-Information ?
+	cpfseq	Work2		; Reset fÃ¼r Taster-Information ?
 	goto	Answer		; Nein, Ende
 
-	clrf	Taster		; Ja, Speicher löschen
+	clrf	Taster		; Ja, Speicher lÃ¶schen
 	goto	Answer
 
 	; Schalten der Lampen und der Hupe(n) bei kurzem Datensatz
 Peri2	movlb	1
-	clrf	Work2		; Zwischenspeicher löschen
+	clrf	Work2		; Zwischenspeicher lÃ¶schen
 	movlw	A'0'		; '0' = Inaktiv
 	cpfseq	SerData+D'31'	; 1. Lampe
 	bsf	Work2,0		; Wenn aktiv, Bit setzen
@@ -208,41 +208,41 @@ Peri2	movlb	1
 	movfp	SerData+D'39',WREG	; Taster-Reset Byte
 	movwf	Work2
 	movlw	A'1'
-	cpfseq	Work2		; Reset für Taster-Information ?
+	cpfseq	Work2		; Reset fÃ¼r Taster-Information ?
 	goto	Answer		; Nein, Ende
 
-	clrf	Taster		; Ja, Speicher löschen
+	clrf	Taster		; Ja, Speicher lÃ¶schen
 
 Answer	movlw	D'2'		; Antwort senden
 	call	TXData
 	movlw	'0'
-	btfsc	Taster,0	; Taster 1 gedrückt ?
+	btfsc	Taster,0	; Taster 1 gedrÃ¼ckt ?
 	movlw	'1'
 	call	TXData
 	movlw	'0'
-	btfsc	Taster,1	; Taster 2 gedrückt ?
+	btfsc	Taster,1	; Taster 2 gedrÃ¼ckt ?
 	movlw	'1'
 	call	TXData
 	movlw	'0'
-	btfsc	Taster,2	; Taster 3 gedrückt ?
+	btfsc	Taster,2	; Taster 3 gedrÃ¼ckt ?
 	movlw	'1'
 	call	TXData
 	movlw	'0'
-	btfsc	Taster,3	; Taster 4 gedrückt ?
+	btfsc	Taster,3	; Taster 4 gedrÃ¼ckt ?
 	movlw	'1'
 	call	TXData
 	movlw	'0'
-	btfsc	Taster,4	; Taster 5 gedrückt ?
+	btfsc	Taster,4	; Taster 5 gedrÃ¼ckt ?
 	movlw	'1'
 	call	TXData
 	movlw	'0'
-	btfsc	Taster,5	; Taster 6 gedrückt ?
+	btfsc	Taster,5	; Taster 6 gedrÃ¼ckt ?
 	movlw	'1'
 	call	TXData
 	movlw	D'3'
 	call	TXData
 
-	bcf	Flag,0			; Flag löschen
+	bcf	Flag,0			; Flag lÃ¶schen
 	return
 
 	; Beschreibt eine der Anzeigezeilen
@@ -256,13 +256,13 @@ WrZeile	movlw	D'80'		; 80
 	movwf	Work1		; als Letzte Kolonne setzen
 
 	movlw	D'13'
-	movwf	Digit		; Zeichenzähler
+	movwf	Digit		; ZeichenzÃ¤hler
 
 WZ1	movfp	Work4,FSR1	; Zeiger vorbereiten
 	movpf	INDF1,Char	; Daten kopieren
 	call	SetPDig
 
-	incf	Work4		; nächstes Zeichen
+	incf	Work4		; nÃ¤chstes Zeichen
 	decfsz	Digit
 	goto	WZ1
 
@@ -271,15 +271,15 @@ WZ1	movfp	Work4,FSR1	; Zeiger vorbereiten
 WZE	movfp	Work1,WREG	; letzte Kolonne erreicht ?
 	cpfslt	Col
 	return
-	call	ClrCol		; Kolonne löschen
+	call	ClrCol		; Kolonne lÃ¶schen
 	goto	WZE
 
-	; Interrupt Routine, Empfängt Daten über die Serielle Schnittstelle
+	; Interrupt Routine, EmpfÃ¤ngt Daten Ã¼ber die Serielle Schnittstelle
 SerIRQ	movlb	1
 	bcf	_EN		; Anzeige aus
 	movlb	0
 
-	movlw	1		; Status prüfen
+	movlw	1		; Status prÃ¼fen
 	cpfsgt	RXS
 	goto	Status1		; Empfange StartByte 0x02
 	movlw	2
@@ -287,11 +287,11 @@ SerIRQ	movlb	1
 	goto	Status2 	; Empfange Daten + EndByte 0x03
 	movlw	3
 	cpfsgt	RXS
-	goto	Status3 	; Empfange Prüfsumme
+	goto	Status3 	; Empfange PrÃ¼fsumme
 
 SerErr	movlw	1
 	movwf	RXS		; Status wieder 1
-	clrf	Check		; Prüfsumme zurücksetzen
+	clrf	Check		; PrÃ¼fsumme zurÃ¼cksetzen
 	goto	SerEnde
 
 Status1	movlw	D'2'		; Startzeichen
@@ -299,26 +299,26 @@ Status1	movlw	D'2'		; Startzeichen
 	goto	SerErr		; Nein, Fehler
 
 	incf	RXS		; Status = 2
-	clrf	ZZ		; Zeichenzähler löschen
+	clrf	ZZ		; ZeichenzÃ¤hler lÃ¶schen
 	movlw	2
-	movwf	Check		; Prüfsumme bilden
+	movwf	Check		; PrÃ¼fsumme bilden
 	goto	SerEnde
 
 Status2	movlw	D'3'		; Ende empfangen ? (ETX)
 	cpfseq	RCREG
 	goto	ST21
 
-	addwf	Check,F		; zu Prüfsumme addieren
+	addwf	Check,F		; zu PrÃ¼fsumme addieren
 	incf	RXS		; RXS = 3
 	goto	SerEnde
 
 ST21	movlw	SerData		; Adresse Datenspeicher
-	addwf	ZZ,W		; Zähler addieren
+	addwf	ZZ,W		; ZÃ¤hler addieren
 	movwf	FSR0		; Als Zeiger speichern
 	movfp	RCREG,WREG
 	movwf	INDF0		; Zeichen speichern
 	addwf	Check,F		; Zeichen zu Checksumme addieren
-	incf	ZZ		; Zeichenzähler ehöhen
+	incf	ZZ		; ZeichenzÃ¤hler ehÃ¶hen
 	movlw	D'55'
 	cpfseq	ZZ		; schon 55 Zeichen empfangen ? (zu lang!)
 	goto	SerEnde
@@ -326,7 +326,7 @@ ST21	movlw	SerData		; Adresse Datenspeicher
 	goto	SerErr		; Empfang abbrechen
 
 Status3	movfp	Check,WREG
-	cpfseq	RCREG		; Prüfsumme korrekt ?
+	cpfseq	RCREG		; PrÃ¼fsumme korrekt ?
 	goto	SerErr		; Nein, Datensatz verwerfen
 
 	bsf	RXFlag,1
@@ -339,7 +339,7 @@ Status3	movfp	Check,WREG
 
 SerEnde	movlb	1
 	bsf	_EN		; Anzeige ein
-	bcf	PIR,0		; IRQ Flag löschen
+	bcf	PIR,0		; IRQ Flag lÃ¶schen
 	return
 
 	; Ein Byte ausgeben (in WREG)
@@ -351,13 +351,13 @@ TXD1	btfss	TXSTA,1		; TSR Leer ?
 
 	; Schaltet alle Anzeigen einmal ein und wieder aus
 DisTest	movlw	3
-	movwf	Work2		; Zähler = 3
+	movwf	Work2		; ZÃ¤hler = 3
 
 DT0	call	DT1		; Anzeigen setzen
 
 	call	Pause		; 125ms Pause
 
-	call	DT2		; Anzeigen löschen
+	call	DT2		; Anzeigen lÃ¶schen
 
 	call	Pause
 
@@ -380,7 +380,7 @@ DT10	setf	INDF1
 
 	movlw	0xff		; Anzeigemuster
 DT11	movwf	INDF1
-	incfsz	FSR1		; Speicher bis zum Ende füllen
+	incfsz	FSR1		; Speicher bis zum Ende fÃ¼llen
 	goto	DT11
 
 	movlr	0		; RAM-Bank 0
@@ -403,7 +403,7 @@ DT20	clrf	INDF1
 
 	movlw	0		; Anzeigemuster
 DT22	movwf	INDF1
-	incfsz	FSR1		; Speicher bis zum Ende füllen
+	incfsz	FSR1		; Speicher bis zum Ende fÃ¼llen
 	goto	DT22
 
 	movlr	0		; RAM-Bank 0
@@ -424,7 +424,7 @@ Pause2	nop			; 0,5ms bei 16 MHz
 	nop
 	nop
 	nop
-	decfsz	PTC		; Zähler -1
+	decfsz	PTC		; ZÃ¤hler -1
 	goto	Pause2
 	return
 
