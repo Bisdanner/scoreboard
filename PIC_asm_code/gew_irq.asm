@@ -1,7 +1,7 @@
 	;
 	; 1 Zeichen in den Anzeigenspeicher schreiben (8 von 8)
-	; Übergabe : Zeichencode in Char, Position in Col, 
-	; Font Startadresse in AFont (16Bit), Start Längentabelle in AFl
+	; Ãœbergabe : Zeichencode in Char, Position in Col, 
+	; Font Startadresse in AFont (16Bit), Start LÃ¤ngentabelle in AFl
 
 SetPDig	movlb	1
 	call	FPntr		; 1. Byte laden
@@ -14,7 +14,7 @@ SetPDig	movlb	1
 	tablrd	0,1,Zeichen
 
 	movlw	5
-	movwf	Len		; Länge = 5
+	movwf	Len		; LÃ¤nge = 5
 	movlw	Zeichen
 	movwf	FSR0		; FSR0 auf erstes Bitmuster
 
@@ -24,12 +24,12 @@ SetPDig	movlb	1
 	clrf	ZCntr		; 1. Zeile
 
 SPD0	movfp	Len,WREG
-	movwf	CCntr		; Zähler auf Startwert
+	movwf	CCntr		; ZÃ¤hler auf Startwert
 	call	SetZl		; FSR1 vorbereiten
 	movfp	Col1,WREG
 	movwf	Col		; Kolonne auf Startwert
 
-SPD1	movfp	ZBase,FSR1	; Startwert für FSR1 (Zeilenstart)
+SPD1	movfp	ZBase,FSR1	; Startwert fÃ¼r FSR1 (Zeilenstart)
 	movfp	Col,WREG
 	movwf	RCol		; echte Kolonne aus Tabelle laden
 	andlw	B'11111000'	; Bits maskieren	-> Byte bestimmen
@@ -44,25 +44,25 @@ SPD1	movfp	ZBase,FSR1	; Startwert für FSR1 (Zeilenstart)
 	btfsc	INDF0,4		; Bit des Zeichenmusters testen
 	goto	SPD2
 
-	call	ClrDot		; Punkt löschen
+	call	ClrDot		; Punkt lÃ¶schen
 	goto	SPD3
 
 SPD2	call	SetDot		; Punkt setzen
 
 SPD3	rlncf	INDF0		; Bitmuster verschieben
-	incf	Col		; nächste Kolonne
+	incf	Col		; nÃ¤chste Kolonne
 	decfsz	CCntr
-	goto	SPD1		; nächster Punkt (5x)
+	goto	SPD1		; nÃ¤chster Punkt (5x)
 
 	incf	ZCntr		
-	incf	FSR0		; nächstes Bitmuster
+	incf	FSR0		; nÃ¤chstes Bitmuster
 	movlw	7
-	cpfseq	ZCntr		; nächste Zeile (7x)
+	cpfseq	ZCntr		; nÃ¤chste Zeile (7x)
 	goto	SPD0
 	call	ClrCol
 	return
 
-ClrCol	movlw	7		; Zeilenzähler auf Startwert
+ClrCol	movlw	7		; ZeilenzÃ¤hler auf Startwert
 	movwf	ZCntr
 
 CC1	decf	ZCntr
@@ -79,22 +79,22 @@ CC1	decf	ZCntr
 	andlw	B'00000111'	; Bitnummer maskieren	-> Bit bestimmen
 	movwf	ZBit		; und speichern	
 
-	call	ClrDot		; Punkt löschen
+	call	ClrDot		; Punkt lÃ¶schen
 
-	decfsz	ZCntr		; nächste Zeile (7x)
+	decfsz	ZCntr		; nÃ¤chste Zeile (7x)
 	goto	CC1
 
-	incf	Col		; Nächste Kolonne
+	incf	Col		; NÃ¤chste Kolonne
 	return
 
 	;
 	; Bit im Speicher setzen
 	;
-SetDot	clrf	WREG		; löschen
-	incf	ZBit		; erhöhen, um einen Durchgang zu erzwingen
+SetDot	clrf	WREG		; lÃ¶schen
+	incf	ZBit		; erhÃ¶hen, um einen Durchgang zu erzwingen
 	bsf	_Carry		; Carry setzen
 SetDot1	rlcf	WREG		; Maske verschieben
-	decfsz	ZBit		; nächstes Bit
+	decfsz	ZBit		; nÃ¤chstes Bit
 	goto	SetDot1		; Neuer Durchgang
 	movlr	1
 	iorwf	INDF1,F		; Bit setzen
@@ -102,16 +102,16 @@ SetDot1	rlcf	WREG		; Maske verschieben
 	return
 
 	;
-	; Bit im Speicher löschen
+	; Bit im Speicher lÃ¶schen
 	;
 ClrDot	movlw	0xff		; setzen
-	incf	ZBit		; erhöhen, um einen Durchgang zu erzwingen
-	bcf	_Carry		; Carry löschen
+	incf	ZBit		; erhÃ¶hen, um einen Durchgang zu erzwingen
+	bcf	_Carry		; Carry lÃ¶schen
 ClrDot1	rlcf	WREG		; Maske verschieben
-	decfsz	ZBit		; nächstes Bit
+	decfsz	ZBit		; nÃ¤chstes Bit
 	goto	ClrDot1		; Neuer Durchgang
 	movlr	1
-	andwf	INDF1,F		; Bit löschen
+	andwf	INDF1,F		; Bit lÃ¶schen
 	movlr	0
 	return
 
@@ -179,8 +179,8 @@ FPntr	movlw	0x20
 
 FPntr1	movfp	Char,WREG
 	movwf	TBLPTRL		; Tablepointer laden
-	clrf	TBLPTRH		; Highbyte löschen
-	bcf	_Carry		; Carry löschen
+	clrf	TBLPTRH		; Highbyte lÃ¶schen
+	bcf	_Carry		; Carry lÃ¶schen
 	rlcf	TBLPTRL
 	rlcf	TBLPTRH		; x2
 	rlcf	TBLPTRL
@@ -222,11 +222,11 @@ LEDIRQ	movlb	1		; Bank 1 aktivieren
 	rlncf	WREG		; x10
 	rlncf	WREG		; x20
 	addlw	Z1		; Basisadresse addieren,
-	decf	WREG		; -1 für echten Anfang
+	decf	WREG		; -1 fÃ¼r echten Anfang
 	movwf	DPtr		; als Zeiger setzen
 	
 	movlw	_AnzByte
-	movwf	ICount		; Bytezähler setzen
+	movwf	ICount		; BytezÃ¤hler setzen
 
 IRQ1	movfp	DPtr,FSR0	; Zeiger setzen
 	movlr	1
@@ -236,12 +236,12 @@ IRQ1	movfp	DPtr,FSR0	; Zeiger setzen
 
 	call	ShByte		; Bitmuster ausgeben
 
-	decf	DPtr		; nächstes Byte
+	decf	DPtr		; nÃ¤chstes Byte
 
-	decfsz	ICount		; nächstes Byte ausgeben
+	decfsz	ICount		; nÃ¤chstes Byte ausgeben
 	goto	IRQ1
 
-	movpf	ZTreib,SerOut	; Muster für Zeilentreiber laden
+	movpf	ZTreib,SerOut	; Muster fÃ¼r Zeilentreiber laden
 	call	ShByte		; und ausgeben
 
 	bcf	_EN		; Anzeige aus
@@ -257,34 +257,34 @@ IRQ2	nop			; Pause bei Zeilenumschaltung zur Schattenvermeidung
 
 	bsf	_EN		; Anzeige ein
 
-	incf	Zeile		; nächste Zeile
-	rrncf	ZTreib		; nächstes Muster für Zeilentreiber	
+	incf	Zeile		; nÃ¤chste Zeile
+	rrncf	ZTreib		; nÃ¤chstes Muster fÃ¼r Zeilentreiber	
 
 	movlb	1
-	bcf	PIR,6		; IRQ Flag löschen
+	bcf	PIR,6		; IRQ Flag lÃ¶schen
 	bcf	_Data
 
 	movlw	8
-	cpfseq	Zeile		; Zeile 8 erreicht ( Überlauf !)
+	cpfseq	Zeile		; Zeile 8 erreicht ( Ãœberlauf !)
 	return
 
 	movlw	1
 	movwf	Zeile		; Zeile wieder 0
 	movlw	_ZTreibM
-	movwf	ZTreib		; Muster für Zeilentreiber auf Startwert
+	movwf	ZTreib		; Muster fÃ¼r Zeilentreiber auf Startwert
 
 	; Hier folgt die Tastenabfrage !
 	movlb	0
 	movfp	_Tasten,WREG	; Tastenzustand laden
 	xorlw	B'00111111'	; und Invertieren
-	andlw	B'00111111'	; unerwünschte Bits maskieren
-	iorwf	Taster,F	; zu vorhandenen Informationen hinzufügen
+	andlw	B'00111111'	; unerwÃ¼nschte Bits maskieren
+	iorwf	Taster,F	; zu vorhandenen Informationen hinzufÃ¼gen
 
 	return
 
 ;	ShiftByte, schreibt ein Byte in die Registerkette (Dynamisch)
 
-ShByte	movlw	0x8		; Zähler laden
+ShByte	movlw	0x8		; ZÃ¤hler laden
 SB1	rlcf	SerOut
 	bsf	_Data		; Data = 1
 	btfss	_Carry		; Carry testen
