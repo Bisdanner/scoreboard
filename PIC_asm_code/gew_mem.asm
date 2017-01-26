@@ -16,7 +16,7 @@
 	#define	L6	PORTC,5
 	#define Lampen	PORTC
 
-	#define	_Tasten	PORTB	; Port für die 6 Taster
+	#define	_Tasten	PORTB	; Port fÃ¼r die 6 Taster
 
 	#define	Hupe	PORTC,6	; Hupe
 	#define	ExHupe	PORTC,7	; Externe Hupe
@@ -25,15 +25,15 @@
 
 		ISave
 		ISave1
-		ISave2		; Zwischenspeicher für IRQ
+		ISave2		; Zwischenspeicher fÃ¼r IRQ
 		ISave3
 
-		ZTreib		; Muster für Zeilentreiber
+		ZTreib		; Muster fÃ¼r Zeilentreiber
 		Char		; Zeichencode
 
-		Flag		; 8 Bits für verschiedene Aufgaben
+		Flag		; 8 Bits fÃ¼r verschiedene Aufgaben
 				; Bit0 = Aktuelle Anzeigezeile 0 oder 1
-				; Bit1 = für IRQ, 1 wenn RAM1 aktiv
+				; Bit1 = fÃ¼r IRQ, 1 wenn RAM1 aktiv
 				; Bit6 = 1->SetAnz aufrufen
 
 		Work1
@@ -44,37 +44,37 @@
 		PTC
 		TestCnt
 
-		Taster		; Zwischenspeicher für die Tasterwerte
+		Taster		; Zwischenspeicher fÃ¼r die Tasterwerte
 
 		Digit		; Digitnummer
 		Col		; Aktuelle Kolonne (falsch)
 		RCol		; Aktuelle Kolonne (echt aus Tabelle)
-		Col1		; Zwischenspeicher für Col
-		ZCntr		; Zeilenzähler für SetPDig
-		CCntr		; Kolonnenzähler für SetPDig
+		Col1		; Zwischenspeicher fÃ¼r Col
+		ZCntr		; ZeilenzÃ¤hler fÃ¼r SetPDig
+		CCntr		; KolonnenzÃ¤hler fÃ¼r SetPDig
 		ZBase		; Basisadresse der aktuellen Zeile
-		ZBit		; Bit welches manipuliert werden muß
+		ZBit		; Bit welches manipuliert werden muÃŸ
 
 		AFont
 		AFont1		; Startadresse des aktuellen Fonts
 
 		AFl
-		AFl1		; Startadresse der Längentabelle
-		Len		; Länge des aktuellen Zeichens
+		AFl1		; Startadresse der LÃ¤ngentabelle
+		Len		; LÃ¤nge des aktuellen Zeichens
 
-		ICount		; Byte-Zähler (Dynamisch)
+		ICount		; Byte-ZÃ¤hler (Dynamisch)
 		DPtr		; Zeiger auf den Data-Bereich
 		SerOut		; Auszugebende Daten
 		Zeile		; zu beschreibende Zeile
 
 		RXS		; Empfangsstatus
-		ZZ		; Zeichenzähler
+		ZZ		; ZeichenzÃ¤hler
 		RXFlag		; Bit0 -> 1=Daten empfangen
 				; Bit1 -> 1=Kurzer Datensatz 0=Langer Datensatz
 
-		Check		; Speicher für Prüfsumme
+		Check		; Speicher fÃ¼r PrÃ¼fsumme
 
-		Zeichen		; Speicher für die Fontdaten eines Zeichens
+		Zeichen		; Speicher fÃ¼r die Fontdaten eines Zeichens
 		Zeichen1
 		Zeichen2
 		Zeichen3
@@ -91,7 +91,7 @@
 		Z3_1
 		Z3_2
 		Z3_3
-		Z4_1		; Anzeigepuffer für die drei einzelnen Zeichen
+		Z4_1		; Anzeigepuffer fÃ¼r die drei einzelnen Zeichen
 		Z4_2
 		Z4_3
 		Z5_1
