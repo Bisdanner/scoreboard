@@ -1227,7 +1227,9 @@ void loop()
       } else {
         buzzerVar = BUZZER_VAL_HT;
       }
-      if (counter_for_waiting % buzzerVar == 1) {
+      
+      // buzzerloop, is called twice
+      if (counter_for_waiting % buzzerVar == 1) { // activate buzzer by first run
         if (buzzerOn == false && alreadyBuzzered == false) {
           buzzerOn = true;
         } else {
@@ -1238,12 +1240,19 @@ void loop()
         delay(50);
         Toggle_12VLED();
       }
-      if ( alreadyBuzzered ) { //was startStopPressed
-        actionState = E_SETUP;
-        if (firstHalftimeOver == false) {
-          setupState = E_SETUP_HALFTIME;// E_SETUP_HALFTIME;
+          
+      // called if buzzerloop was called twice
+      // For Halftime there is no further interaction needed, 
+      if (alreadyBuzzered) { //was startStopPressed
+        if (firstHalftimeOver == false) { //
+          setupState = E_SETUP_HALFTIME;
+          actionState = E_SETUP;
         } else {
-          setupState = E_SETUP_CLUB;
+          // If the game is over, we will wait for the startStopButton
+          if ( startStopPressed ) {
+            actionState = E_SETUP;
+            setupState = E_SETUP_CLUB;
+          }
         }
       }
       break;
