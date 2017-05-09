@@ -1122,7 +1122,7 @@ void loop()
         seconds = initialSeconds;
         buzzerOn = false;
       }
-
+      CheckButtonsAndSwitchGoals(); //This is new 2017-05-09
       ScoreBoardOutput();
       delay(100);
       if (counter_for_buzzing == 5) {
