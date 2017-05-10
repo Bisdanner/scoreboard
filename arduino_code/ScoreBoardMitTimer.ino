@@ -987,6 +987,7 @@ void loop()
       switch (setupState) {
         case E_SETUP_HALFTIME :
           ResetForHalftime();
+          CheckButtonsAndSwitchGoals();
           if (startStopPressed) {
             ClearLCDRow(2);
             ClearLCDRow(3);
