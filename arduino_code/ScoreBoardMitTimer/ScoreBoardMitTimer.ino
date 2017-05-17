@@ -387,9 +387,9 @@ void setup()
 
 void LCDWrite(String string) {
   int index[3];
-  index[0] = string.indexOf("ä");
-  index[1] = string.indexOf("ö");
-  index[2] = string.indexOf("ü");
+  index[0] = string.indexOf('ä');
+  index[1] = string.indexOf('ö');
+  index[2] = string.indexOf('ü');
 
   if ( index[0] == -1 && index[1] == -1 && index[2] == -1 ) {
     lcd.print(string);
