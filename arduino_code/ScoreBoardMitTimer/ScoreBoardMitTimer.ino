@@ -1,23 +1,23 @@
-#include <TimerOne.h>
+#include "TimerOne.h"
+#include "LiquidCrystal.h"
+#include <Wire.h>
 
-#include <FastIO.h>
-#include <I2CIO.h>
-#include <LCD.h>
-#include <LiquidCrystal.h>
-#include <LiquidCrystal_I2C.h>
-#include <LiquidCrystal_SR.h>
-#include <LiquidCrystal_SR2W.h>
-#include <LiquidCrystal_SR3W.h>
+
+#include "LiquidCrystal_I2C.h"
+#include "LiquidCrystal_SR.h"
+#include "LiquidCrystal_SR2W.h"
+#include "LiquidCrystal_SR3W.h"
 
 #include <avr/pgmspace.h>
 
+#include "FastIO.h"
 
 
 /** NOTE:
  * Tested on Arduino Uno whose I2C pins are A4==SDA, A5==SCL
  */
 
-#include <Wire.h>
+
 
 #include <Bounce2.h>
 
@@ -387,9 +387,9 @@ void setup()
 
 void LCDWrite(String string) {
   int index[3];
-  index[0] = string.indexOf('ä');
-  index[1] = string.indexOf('ö');
-  index[2] = string.indexOf('ü');
+  index[0] = string.indexOf("ä");
+  index[1] = string.indexOf("ö");
+  index[2] = string.indexOf("ü");
 
   if ( index[0] == -1 && index[1] == -1 && index[2] == -1 ) {
     lcd.print(string);
@@ -987,6 +987,7 @@ void loop()
       switch (setupState) {
         case E_SETUP_HALFTIME :
           ResetForHalftime();
+          CheckButtonsAndSwitchGoals();
           if (startStopPressed) {
             ClearLCDRow(2);
             ClearLCDRow(3);
@@ -1122,7 +1123,7 @@ void loop()
         seconds = initialSeconds;
         buzzerOn = false;
       }
-
+      CheckButtonsAndSwitchGoals(); //This is new 2017-05-09
       ScoreBoardOutput();
       delay(100);
       if (counter_for_buzzing == 5) {
@@ -1227,7 +1228,9 @@ void loop()
       } else {
         buzzerVar = BUZZER_VAL_HT;
       }
-      if (counter_for_waiting % buzzerVar == 1) {
+      
+      // buzzerloop, is called twice
+      if (counter_for_waiting % buzzerVar == 1) { // activate buzzer by first run
         if (buzzerOn == false && alreadyBuzzered == false) {
           buzzerOn = true;
         } else {
@@ -1238,12 +1241,19 @@ void loop()
         delay(50);
         Toggle_12VLED();
       }
-      if ( alreadyBuzzered ) { //was startStopPressed
-        actionState = E_SETUP;
-        if (firstHalftimeOver == false) {
-          setupState = E_SETUP_HALFTIME;// E_SETUP_HALFTIME;
+          
+      // called if buzzerloop was called twice
+      // For Halftime there is no further interaction needed, 
+      if (alreadyBuzzered) { //was startStopPressed
+        if (firstHalftimeOver == false) { //
+          setupState = E_SETUP_HALFTIME;
+          actionState = E_SETUP;
         } else {
-          setupState = E_SETUP_CLUB;
+          // If the game is over, we will wait for the startStopButton
+          if ( startStopPressed ) {
+            actionState = E_SETUP;
+            setupState = E_SETUP_CLUB;
+          }
         }
       }
       break;
